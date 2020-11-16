@@ -11,5 +11,13 @@
 
     <artifactId>leyou-item-interface</artifactId>
 
+    <dependencies>
+<!--        因为直接引入通用mapper会引入过多的依赖，而我们只要注解 相关的依赖就可以，所以只引入与注解相关的依赖-->
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
 
 </project>
