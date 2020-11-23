@@ -13,10 +13,6 @@
         <module name="leyou-item-service" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="leyou-item" target="1.8" />
-      <module name="lymail" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

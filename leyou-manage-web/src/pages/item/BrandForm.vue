@@ -13,9 +13,8 @@
         <span style="font-size: 16px; color: #444">品牌LOGO：</span>
       </v-flex>
       <v-flex>
-        <v-upload
-          v-model="brand.image" url="/upload/image" :multiple="false" :pic-width="250" :pic-height="90"
-        />
+<!--        单文件上传，v-model数据绑定。url 上传路径 multiple 是否允许多文件上传  pic-width 图片宽。pic-height 图片高-->
+        <v-upload v-model="brand.image" url="/upload/image" :multiple="false" :pic-width="250" :pic-height="90" />
       </v-flex>
     </v-layout>
     <v-layout class="my-4" row>
@@ -62,17 +61,20 @@
         // 表单校验
         if (this.$refs.myBrandForm.validate()) {
           // 定义一个请求参数对象，通过解构表达式来获取brand中的属性
-          const {categories, letter, ...params} = this.brand;
+          // 结构表达式跟python中的元组拆包类似，将brand中的前两个属性 放到categories以及letter变量中，
+          // 其余的放到params中
+          const {categories, letter, ...params} = this.brand; //params:{name,image}
           // 数据库中只要保存分类的id即可，因此我们对categories的值进行处理,只保留id，并转为字符串
           params.cids = categories.map(c => c.id).join(",");
           // 将字母都处理为大写
           params.letter = letter.toUpperCase();
+          //给params新增属性。params:{name,image,cid,letter}
           // 将数据提交到后台
           // this.$http.post('/item/brand', this.$qs.stringify(params))
           this.$http({
             method: this.isEdit ? 'put' : 'post',
             url: '/item/brand',
-            data: params
+            data: this.$qs.stringify(params)
           }).then(() => {
             // 关闭窗口
             this.$emit("close");

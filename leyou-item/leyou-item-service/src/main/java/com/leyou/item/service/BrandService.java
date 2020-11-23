@@ -8,6 +8,7 @@ import com.leyou.item.pojo.Brand;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -46,5 +47,27 @@ public class BrandService {
         PageInfo<Brand> pageInfo = new PageInfo<>(brands);
         //包装成分页结果集返回
         return new PageResult<>(pageInfo.getTotal(),pageInfo.getList());
+    }
+
+    @Transactional
+    public void saveBrand(Brand brand, List<Long> cids) {
+        //先新增品牌
+        //.insert方法:insert into tb_brand(id,name,letter,images) values (null,name,null,null)
+        // 会在插入时全部插入，没有提供的字段设置为null
+        //.insertSelective方法：则是insert into tb_brand(name) values (name)
+        // 没有传的参数不新增 效率更高
+//        boolean isInsertSuccess = this.brandMapper.insertSelective(brand) == 1;
+        //加了Transactional 进行事务处理后 就不需要再判断了
+        this.brandMapper.insertSelective(brand);
+        //后新增中间表
+//        if(isInsertSuccess){
+//            cids.forEach(cid ->{
+//                //因为通用mapper只能操作单张表，所以若是设计多表操作则需要自己写sql
+//                this.brandMapper.insertCategoryAndBrand(cid,brand.getId());
+//            });
+//        }
+        cids.forEach(cid -> {
+            this.brandMapper.insertCategoryAndBrand(cid,brand.getId());
+        });
     }
 }
