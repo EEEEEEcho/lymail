@@ -156,6 +156,7 @@
       },
       async editGoods(oldGoods) {
         // 发起请求，查询商品详情和skus
+        // await关键字，使异步操作转换为同步操作，必须等待请求执行完成之后才能进行下面的代码
         oldGoods.spuDetail = await this.$http.loadData("/item/spu/detail/" + oldGoods.id);
         oldGoods.skus = await this.$http.loadData("/item/sku/list?id=" + oldGoods.id);
         // 修改标记

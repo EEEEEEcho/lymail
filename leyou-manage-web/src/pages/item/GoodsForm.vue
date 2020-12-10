@@ -228,7 +228,7 @@ export default {
           this.$message.success("保存成功了");
         })
         .catch(() => {
-          this.$message.error("保存失败！");
+          this.$message.error("保存失败npm！");
         });
     }
   },
